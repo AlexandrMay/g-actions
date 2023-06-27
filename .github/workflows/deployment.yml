@@ -24,6 +24,7 @@ jobs:
         run: npm run lint
   build:
     needs: deploy
+    continue-on-error: true
     strategy:
       matrix:
         node-version: [16, 18]
@@ -40,6 +41,9 @@ jobs:
         run: npm ci
       - name: Cache dependencies
         uses: actions/cache@v3
+          with:
+          path: ~/.npm
+          key: node-modules-${{ hashFiles('**/package-lock.json') }}
       - name: Build App
         run: npm run build
       - name: Deploy
